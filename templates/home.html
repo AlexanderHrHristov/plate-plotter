@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Начало | PlatePlotter{% endblock %}
+
+{% block content %}
+
+<div class="rounded-3 p-5 text-white"
+     style="
+        background-image: url('{% static 'images/home.png' %}');
+        background-size: cover;
+        background-position: center;
+        min-height: 450px;
+        display: flex;
+        align-items: center;
+     ">
+
+    <div style="
+        background-color: rgba(0,0,0,0.55);
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 650px;
+    ">
+
+        <h1 class="display-5 fw-bold mb-3">
+            PlatePlotter
+        </h1>
+
+        <p class="fs-5">
+            Планирай седмичното си меню, следи наличностите у дома
+            и генерирай списък за пазаруване.
+        </p>
+
+        <div class="mt-4">
+            <a href="{% url 'product-list' %}" class="btn btn-primary me-2">
+                Продукти
+            </a>
+
+            <a href="{% url 'dish-list' %}" class="btn btn-success me-2">
+                Ястия
+            </a>
+
+            <a href="{% url 'weekmenu-list' %}" class="btn btn-dark">
+                Седмично меню
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

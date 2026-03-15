@@ -6,7 +6,7 @@ class Store(models.Model):
     name = models.CharField(
         max_length=40,
         unique=True,
-        verbose_name="Магазин",  # магазинът, от който най-често купувам този продукт (Билла, Лидл, бакалия...)
+        verbose_name="Магазин",
     )
 
     def __str__(self):
@@ -16,10 +16,10 @@ class Store(models.Model):
 class Product(models.Model):
     UNIT_CHOICES = [
         ("g", "Грамове (g)"),
-        ("pcs", "Опаковка (бр.)"),  # ползвам за продукти на брой/опаковка + течности (мляко, бира и т.н.)
+        ("pcs", "Опаковка (бр.)"),
     ]
 
-    CATHEGORY_CHOICES = [
+    CATEGORY_CHOICES = [
         ("meat_fish", "Месо, риба, яйца"),
         ("milk_cheese", "Млечни продукти"),
         ("grains_legumes", "Зърнени храни и бобови"),
@@ -28,7 +28,6 @@ class Product(models.Model):
         ("desserts_sweets", "Десерти и сладки храни"),
         ("drinks", "Напитки"),
         ("packaged_store", "Готови храни"),
-
     ]
 
     name = models.CharField(
@@ -39,7 +38,7 @@ class Product(models.Model):
     brand = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name="Марка",  # ако има различни производители: "Верея", "Добрев", "Pilos" и т.н.
+        verbose_name="Марка",
     )
 
     store = models.ForeignKey(
@@ -47,7 +46,13 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name="Магазин", # от кой магазин купувам продукта
+        verbose_name="Магазин",
+    )
+
+    category = models.CharField(
+        max_length=30,
+        choices=CATEGORY_CHOICES,
+        verbose_name="Категория",
     )
 
     unit = models.CharField(
@@ -91,10 +96,9 @@ class Product(models.Model):
         default=0,
         validators=[MinValueValidator(0)],
         verbose_name="Цена",
-        help_text="Цена за килограм или опаковка",  # за течности - цена за опаковка!
+        help_text="Цена за килограм или опаковка",
     )
 
-    
     is_basic = models.BooleanField(
         default=False,
         verbose_name="Основен продукт",
@@ -102,7 +106,7 @@ class Product(models.Model):
     )
 
     class Meta:
-        unique_together = ("name", "brand")  
+        unique_together = ("name", "brand")
 
     def full_name(self):
         return f"{self.name} {self.brand}".strip()
@@ -115,27 +119,28 @@ class Inventory(models.Model):
     product = models.OneToOneField(
         Product,
         on_delete=models.CASCADE,
-        related_name='inventory',
-        verbose_name='Продукт',
+        related_name="inventory",
+        verbose_name="Продукт",
     )
-
     available_quantity = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
+        max_digits=5,
+        decimal_places=0,
         default=0,
         validators=[MinValueValidator(0)],
-        verbose_name='Налично количество',
+        verbose_name="Налично количество",
+    )
+    minimum_quantity = models.DecimalField(
+        max_digits=5,
+        decimal_places=0,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name="Минимално количество",
     )
 
-    minimum_quantity = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0,
-        validators=[MinValueValidator(0)],
-        verbose_name='Минимално количество',
-    )
+    @property
+    def is_below_minimum(self):
+        return self.available_quantity < self.minimum_quantity
 
     def __str__(self):
-        # g -> "g", pcs -> "бр."
-        unit_label = 'g' if self.product.unit == 'g' else 'бр.'
-        return f'{self.product} - {self.available_quantity} {unit_label}'
+        unit_label = "g" if self.product.unit == "g" else "бр."
+        return f"{self.product} - {self.available_quantity} {unit_label}"

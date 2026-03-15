@@ -17,6 +17,11 @@ class DishDetailView(DetailView):
     template_name = "meals/dish-detail.html"
     context_object_name = "dish"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["recipe_items"] = self.object.recipeitem_set.select_related("product")
+        return context
+
 
 class DishCreateView(CreateView):
     model = Dish

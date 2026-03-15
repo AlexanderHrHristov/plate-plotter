@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Наличности | PlatePlotter{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Наличности</h1>
+
+{% if inventory_items %}
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Продукт</th>
+                <th>Налично количество</th>
+                <th>Минимално количество</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in inventory_items %}
+                <tr>
+                    <td>{{ item.product }}</td>
+                    <td>{{ item.available_quantity }} {{ item.product.unit }}</td>
+                    <td>{{ item.minimum_quantity }} {{ item.product.unit }}</td>
+                    <td>
+                        <a href="{% url 'inventory-edit' item.pk %}" class="btn btn-sm btn-warning">
+                            Редакция
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Все още няма въведени наличности.</p>
+{% endif %}
+{% endblock %}  

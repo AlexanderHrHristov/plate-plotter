@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -23,6 +22,17 @@ class ProductCreateView(CreateView):
     form_class = ProductForm
     template_name = "inventory/product-create.html"
     success_url = reverse_lazy("product-list")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        Inventory.objects.get_or_create(
+            product=self.object,
+            defaults={
+                "available_quantity": 0,
+                "minimum_quantity": 0,
+            }
+        )
+        return response
 
 
 class ProductUpdateView(UpdateView):
@@ -49,5 +59,3 @@ class InventoryUpdateView(UpdateView):
     form_class = InventoryEditForm
     template_name = "inventory/inventory-edit.html"
     success_url = reverse_lazy("inventory-list")
-
-# Create your views here.

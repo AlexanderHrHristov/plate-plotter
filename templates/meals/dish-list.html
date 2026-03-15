@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Ястия | PlatePlotter{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Ястия</h1>
+    <a href="{% url 'dish-create' %}" class="btn btn-primary">Добави ястие</a>
+</div>
+
+{% if dishes %}
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Ястие</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dish in dishes %}
+                <tr>
+                    <td>{{ dish.name }}</td>
+                    <td>{{ dish.description|default:"-" }}</td>
+                    <td>
+                        <a href="{% url 'dish-detail' dish.pk %}" class="btn btn-sm btn-info">Детайли</a>
+                        <a href="{% url 'dish-edit' dish.pk %}" class="btn btn-sm btn-warning">Редакция</a>
+                        <a href="{% url 'dish-delete' dish.pk %}" class="btn btn-sm btn-danger">Изтрий</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Все още няма добавени ястия.</p>
+{% endif %}
+{% endblock %}

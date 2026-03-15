@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Седмично меню | PlatePlotter{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Седмица от {{ weekmenu.start_date }}</h1>
+
+<p><strong>Бележки:</strong> {{ weekmenu.notes|default:"-" }}</p>
+
+<div class="mb-3">
+    <a href="{% url 'meal-create' %}" class="btn btn-primary">Добави хранене</a>
+    <a href="{% url 'weekmenu-edit' weekmenu.pk %}" class="btn btn-warning">Редакция</a>
+    <a href="{% url 'weekmenu-delete' weekmenu.pk %}" class="btn btn-danger">Изтрий</a>
+</div>
+
+{% if weekmenu.meals.all %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Ден</th>
+                <th>Хранене</th>
+                <th>Ястие</th>
+                <th>Навън</th>
+                <th>Бележки</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meal in weekmenu.meals.all %}
+                <tr>
+                    <td>{{ meal.get_day_display }}</td>
+                    <td>{{ meal.get_meal_type_display }}</td>
+                    <td>{{ meal.dish|default:"-" }}</td>
+                    <td>{% if meal.eating_out %}Да{% else %}Не{% endif %}</td>
+                    <td>{{ meal.notes|default:"-" }}</td>
+                    <td>
+                        <a href="{% url 'meal-edit' meal.pk %}" class="btn btn-sm btn-warning">Редакция</a>
+                        <a href="{% url 'meal-delete' meal.pk %}" class="btn btn-sm btn-danger">Изтрий</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Все още няма добавени хранения за тази седмица.</p>
+{% endif %}
+
+<a href="{% url 'weekmenu-list' %}" class="btn btn-secondary">Назад</a>
+{% endblock %}

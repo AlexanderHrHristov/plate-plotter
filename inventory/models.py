@@ -2,21 +2,10 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 
-class Store(models.Model):
-    name = models.CharField(
-        max_length=40,
-        unique=True,
-        verbose_name="Магазин",
-    )
-
-    def __str__(self):
-        return self.name
-
-
 class Product(models.Model):
     UNIT_CHOICES = [
         ("g", "Грамове (g)"),
-        ("pcs", "Опаковка (бр.)"),
+        ("pcs", "Опаковка / брой"),
     ]
 
     CATEGORY_CHOICES = [
@@ -41,14 +30,6 @@ class Product(models.Model):
         verbose_name="Марка",
     )
 
-    store = models.ForeignKey(
-        Store,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name="Магазин",
-    )
-
     category = models.CharField(
         max_length=30,
         choices=CATEGORY_CHOICES,
@@ -63,11 +44,12 @@ class Product(models.Model):
 
     calories_per_100 = models.PositiveIntegerField(
         default=0,
+        validators=[MinValueValidator(0)],
         verbose_name="Калории / 100g",
     )
 
     protein_per_100 = models.DecimalField(
-        max_digits=5,
+        max_digits=6,
         decimal_places=2,
         default=0,
         validators=[MinValueValidator(0)],
@@ -75,7 +57,7 @@ class Product(models.Model):
     )
 
     carbs_per_100 = models.DecimalField(
-        max_digits=5,
+        max_digits=6,
         decimal_places=2,
         default=0,
         validators=[MinValueValidator(0)],
@@ -83,20 +65,11 @@ class Product(models.Model):
     )
 
     fat_per_100 = models.DecimalField(
-        max_digits=5,
+        max_digits=6,
         decimal_places=2,
         default=0,
         validators=[MinValueValidator(0)],
         verbose_name="Мазнини / 100g",
-    )
-
-    price = models.DecimalField(
-        max_digits=7,
-        decimal_places=2,
-        default=0,
-        validators=[MinValueValidator(0)],
-        verbose_name="Цена",
-        help_text="Цена за килограм или опаковка",
     )
 
     is_basic = models.BooleanField(
@@ -107,6 +80,7 @@ class Product(models.Model):
 
     class Meta:
         unique_together = ("name", "brand")
+        ordering = ["name", "brand"]
 
     def full_name(self):
         return f"{self.name} {self.brand}".strip()
@@ -122,15 +96,17 @@ class Inventory(models.Model):
         related_name="inventory",
         verbose_name="Продукт",
     )
+
     available_quantity = models.DecimalField(
-        max_digits=5,
+        max_digits=7,
         decimal_places=0,
         default=0,
         validators=[MinValueValidator(0)],
         verbose_name="Налично количество",
     )
+
     minimum_quantity = models.DecimalField(
-        max_digits=5,
+        max_digits=7,
         decimal_places=0,
         default=0,
         validators=[MinValueValidator(0)],

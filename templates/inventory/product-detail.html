@@ -7,19 +7,40 @@
 
 <div class="card">
     <div class="card-body">
+
         <p><strong>Продукт:</strong> {{ product.name }}</p>
-        <p><strong>Марка:</strong> {{ product.brand|default:"-" }}</p>
-        <p><strong>Магазин:</strong> {{ product.store|default:"-" }}</p>
-        <p><strong>Категория:</strong> {{ product.get_category_display }}</p>
-        <p><strong>Мерна единица:</strong> {{ product.get_unit_display }}</p>
-        <p><strong>Калории / 100g:</strong> {{ product.calories_per_100 }}</p>
-        <p><strong>Белтъчини / 100g:</strong> {{ product.protein_per_100 }}</p>
-        <p><strong>Въглехидрати / 100g:</strong> {{ product.carbs_per_100 }}</p>
-        <p><strong>Мазнини / 100g:</strong> {{ product.fat_per_100 }}</p>
-        <p><strong>Цена:</strong> {{ product.price }}</p>
-        <p><strong>Основен продукт:</strong>
-            {% if product.is_basic %}Да{% else %}Не{% endif %}
+
+        <p><strong>Марка:</strong>
+            {{ product.brand|default:"-" }}
         </p>
+
+        <p><strong>Категория:</strong>
+            {{ product.get_category_display }}
+        </p>
+
+        <p><strong>Мерна единица:</strong>
+            {{ product.get_unit_display }}
+        </p>
+
+        <hr>
+
+        <h5 class="mt-3">Макроси / 100g</h5>
+
+        <p><strong>Калории:</strong> {{ product.calories_per_100 }}</p>
+        <p><strong>Белтъчини:</strong> {{ product.protein_per_100 }}</p>
+        <p><strong>Въглехидрати:</strong> {{ product.carbs_per_100 }}</p>
+        <p><strong>Мазнини:</strong> {{ product.fat_per_100 }}</p>
+
+        <hr>
+
+        <p><strong>Основен продукт:</strong>
+            {% if product.is_basic %}
+                Да
+            {% else %}
+                Не
+            {% endif %}
+        </p>
+
     </div>
 </div>
 

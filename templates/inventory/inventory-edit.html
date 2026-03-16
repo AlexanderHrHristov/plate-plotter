@@ -5,11 +5,21 @@
 {% block content %}
 <h1 class="mb-4">Редакция на наличност</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+<div class="card">
+    <div class="card-body">
+        <p><strong>Продукт:</strong> {{ product }}</p>
+        <p>
+            <strong>Мерна единица:</strong>
+            {% if product.unit == "g" %}g{% else %}бр.{% endif %}
+        </p>
 
-    <button type="submit" class="btn btn-warning">Запази</button>
-    <a href="{% url 'inventory-list' %}" class="btn btn-secondary">Отказ</a>
-</form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-warning">Запази</button>
+            <a href="{% url 'inventory-list' %}" class="btn btn-secondary">Отказ</a>
+        </form>
+    </div>
+</div>
 {% endblock %}

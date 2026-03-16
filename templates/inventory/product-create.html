@@ -5,10 +5,15 @@
 {% block content %}
 <h1 class="mb-4">Добави продукт</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Запази</button>
-    <a href="{% url 'product-list' %}" class="btn btn-secondary">Отказ</a>
-</form>
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">Запази</button>
+            <a href="{% url 'product-list' %}" class="btn btn-secondary">Отказ</a>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -5,10 +5,17 @@
 {% block content %}
 <h1 class="mb-4">Редакция на продукт</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-warning">Запази промените</button>
-    <a href="{% url 'product-detail' product.pk %}" class="btn btn-secondary">Отказ</a>
-</form>
+<div class="card">
+    <div class="card-body">
+        <p class="mb-4"><strong>Продукт:</strong> {{ product }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-warning">Запази</button>
+            <a href="{% url 'product-detail' product.pk %}" class="btn btn-secondary">Отказ</a>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -6,12 +6,14 @@
 <h1 class="mb-4">Наличности</h1>
 
 {% if inventory_items %}
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered align-middle">
         <thead>
             <tr>
                 <th>Продукт</th>
-                <th>Налично количество</th>
-                <th>Минимално количество</th>
+                <th>Категория</th>
+                <th>Налично</th>
+                <th>Минимум</th>
+                <th>Статус</th>
                 <th>Действия</th>
             </tr>
         </thead>
@@ -19,12 +21,24 @@
             {% for item in inventory_items %}
                 <tr>
                     <td>{{ item.product }}</td>
-                    <td>{{ item.available_quantity }} {{ item.product.unit }}</td>
-                    <td>{{ item.minimum_quantity }} {{ item.product.unit }}</td>
+                    <td>{{ item.product.get_category_display }}</td>
                     <td>
-                        <a href="{% url 'inventory-edit' item.pk %}" class="btn btn-sm btn-warning">
-                            Редакция
-                        </a>
+                        {{ item.available_quantity }}
+                        {% if item.product.unit == "g" %}g{% else %}бр.{% endif %}
+                    </td>
+                    <td>
+                        {{ item.minimum_quantity }}
+                        {% if item.product.unit == "g" %}g{% else %}бр.{% endif %}
+                    </td>
+                    <td>
+                        {% if item.is_below_minimum %}
+                            <span class="badge bg-danger">Под минимум</span>
+                        {% else %}
+                            <span class="badge bg-success">ОК</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'inventory-edit' item.pk %}" class="btn btn-sm btn-warning">Редакция</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -33,4 +47,4 @@
 {% else %}
     <p>Все още няма въведени наличности.</p>
 {% endif %}
-{% endblock %}  
+{% endblock %}

@@ -1,76 +1,54 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from inventory.models import Product
 
 
 class Dish(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True)
+    name = models.CharField(
+        max_length=80,
+        unique=True,
+        verbose_name="Ястие",
+    )
 
-    products = models.ManyToManyField(
-        Product,
-        through='RecipeItem',
-        related_name='dishes',
+    calories = models.PositiveIntegerField(
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name="Калории",
+    )
+
+    protein = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name="Белтъчини",
+    )
+
+    carbs = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name="Въглехидрати",
+    )
+
+    fat = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name="Мазнини",
+    )
+
+    note = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Бележка",
     )
 
     class Meta:
-        ordering= ('name',)
+        ordering = ("name",)
+        verbose_name = "Ястие"
+        verbose_name_plural = "Ястия"
 
     def __str__(self):
         return self.name
-
-    def total_calories(self):
-        total = 0
-
-        for item in self.recipeitem_set.all():
-            total += (item.quantity_needed / 100) * item.product.calories_per_100
-
-        return round(total, 2)
-
-    def total_protein(self):
-        total = 0
-
-        for item in self.recipeitem_set.all():
-            total += (item.quantity_needed / 100) * item.product.protein_per_100
-
-        return round(total, 2)
-
-    def total_carbs(self):
-        total = 0
-
-        for item in self.recipeitem_set.all():
-            total += (item.quantity_needed / 100) * item.product.carbs_per_100
-
-        return round(total, 2)
-
-    def total_fat(self):
-        total = 0
-
-        for item in self.recipeitem_set.all():
-            total += (item.quantity_needed / 100) * item.product.fat_per_100
-
-        return round(total, 2)
-
-
-class RecipeItem(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
-
-    quantity_needed = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(0.01)],
-    )
-
-    note = models.CharField(max_length=120, blank=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=('dish', 'product'),
-                name='dish_product',
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.dish} - {self.product} ({self.quantity_needed} {self.product.unit})"

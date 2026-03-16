@@ -11,10 +11,10 @@ class ProductForm(forms.ModelForm):
             "brand": forms.TextInput(attrs={"placeholder": "Марка / Производител"}),
             "category": forms.Select(),
             "unit": forms.Select(),
-            "calories_per_100": forms.NumberInput(attrs={"placeholder": "Калории / 100g"}),
-            "protein_per_100": forms.NumberInput(attrs={"placeholder": "Белтъчини / 100g", "step": "0.01"}),
-            "carbs_per_100": forms.NumberInput(attrs={"placeholder": "Въглехидрати / 100g", "step": "0.01"}),
-            "fat_per_100": forms.NumberInput(attrs={"placeholder": "Мазнини / 100g", "step": "0.01"}),
+            "calories_per_100": forms.NumberInput(attrs={"placeholder": "Калории/100g"}),
+            "protein_per_100": forms.NumberInput(attrs={"placeholder": "Белтъчини/100g"}),
+            "carbs_per_100": forms.NumberInput(attrs={"placeholder":"Въглехидрати/100g"}),
+            "fat_per_100": forms.NumberInput(attrs={"placeholder": "Мазнини/100g"}),
         }
 
 

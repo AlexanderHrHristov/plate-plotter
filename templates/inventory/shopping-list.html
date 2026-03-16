@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Списък за пазаруване | PlatePlotter{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Банер -->
+    <div class="mb-4">
+        <img src="{% static 'images/shopping.png' %}" class="img-fluid rounded">
+    </div>
+
+<h1 class="mb-4">Списък за пазаруване</h1>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-auto">
+        <select name="week_menu" class="form-select">
+            <option value="">Избери седмично меню</option>
+            {% for menu in week_menus %}
+                <option value="{{ menu.pk }}"
+                    {% if selected_week_menu and selected_week_menu.pk == menu.pk %}selected{% endif %}>
+                    Седмица от {{ menu.start_date }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Генерирай</button>
+    </div>
+</form>
+
+{% if selected_week_menu %}
+    {% if shopping_items %}
+        <table class="table table-striped table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Продукт</th>
+                    <th>Налично</th>
+<!--Не визуализирам в UI  <th>Минимум</th> -->
+<!--Не визуализирам в UI  <th>Нужно за седмицата</th> -->
+                          <th>За купуване</th>
+<!--Не визуализирам в UI  <th>Причина</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in shopping_items %}
+                    <tr>
+                          <td>{{ item.product }}</td>
+                          <td>{{ item.available_quantity }} {{ item.product.get_unit_short }}</td>
+<!--Не визуализирам в UI  <td>{{ item.minimum_quantity }} {{ item.product.get_unit_short }}</td> --> 
+<!--Не визуализирам в UI  <td>{{ item.needed_for_week }} {{ item.product.get_unit_short }}</td> --> 
+                          <td><strong>{{ item.quantity_to_buy }} {{ item.product.get_unit_short }}</strong></td>
+<!--Не визуализирам в UI  <td>{{ item.reason }}</td> --> 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-success">
+            Всички продукти са над минималното количество и наличните продукти стигат за избраната седмица.
+        </div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-info">
+        Избери седмично меню, за да се генерира списък за пазаруване.
+    </div>
+{% endif %}
+
+</div>
+
+{% endblock %}

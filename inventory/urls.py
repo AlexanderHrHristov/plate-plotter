@@ -8,6 +8,7 @@ from .views import (
     ProductDeleteView,
     InventoryListView,
     InventoryUpdateView,
+    ShoppingListView
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
 
     path("inventory/", InventoryListView.as_view(), name="inventory-list"),
     path("inventory/<int:pk>/edit/", InventoryUpdateView.as_view(), name="inventory-edit"),
+    path("shopping-list/", ShoppingListView.as_view(), name="shopping-list"),
 ]

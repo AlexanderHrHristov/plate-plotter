@@ -1,20 +1,59 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Продукти | PlatePlotter{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Продукти</h1>
-    <a href="{% url 'product-create' %}" class="btn btn-primary">Добави продукт</a>
+<!-- Hero банер -->
+<div class="rounded-3 p-5 text-white mb-4"
+     style="
+        background-image: url('{% static 'images/products.png' %}');
+        background-size: cover;
+        background-position: center;
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+     ">
+
+    <div style="
+        background-color: rgba(0,0,0,0.55);
+        padding: 25px;
+        border-radius: 12px;
+        max-width: 650px;
+    ">
+
+        <h1 class="fw-bold mb-2">
+            Продукти
+        </h1>
+
+        <p class="mb-0">
+            Управлявай хранителните продукти, техните категории
+            и хранителните им стойности.
+        </p>
+
+    </div>
+
 </div>
 
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Продукти</h2>
+    <a href="{% url 'product-create' %}" class="btn btn-primary">
+        Добави продукт
+    </a>
+</div>
+
+
 <form method="get" class="row g-2 mb-3">
+
     <div class="col-auto">
         <select name="category" class="form-select">
             <option value="">Всички категории</option>
+
             {% for value, label in category_choices %}
-                <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
+                <option value="{{ value }}"
+                    {% if selected_category == value %}selected{% endif %}>
                     {{ label }}
                 </option>
             {% endfor %}
@@ -22,50 +61,91 @@
     </div>
 
     <div class="col-auto">
-        <button type="submit" class="btn btn-outline-primary">Филтрирай</button>
-        <a href="{% url 'product-list' %}" class="btn btn-outline-secondary">Изчисти</a>
+        <button type="submit" class="btn btn-outline-primary">
+            Филтрирай
+        </button>
+
+        <a href="{% url 'product-list' %}" class="btn btn-outline-secondary">
+            Изчисти
+        </a>
     </div>
+
 </form>
 
+
 {% if products %}
-    <table class="table table-striped table-bordered align-middle">
-        <thead>
+
+<table class="table table-striped table-bordered align-middle">
+
+    <thead>
+        <tr>
+            <th>Продукт</th>
+            <th>Категория</th>
+            <th>Единица</th>
+            <th>Макроси / 100g</th>
+            <th>Основен</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for product in products %}
+
             <tr>
-                <th>Продукт</th>
-                <th>Категория</th>
-                <th>Единица</th>
-                <th>Макроси / 100g</th>
-                <th>Основен</th>
-                <th>Действия</th>
+
+                <td>{{ product }}</td>
+
+                <td>{{ product.get_category_display }}</td>
+
+                <td>{{ product.get_unit_display }}</td>
+
+                <td>
+                    Калории: {{ product.calories_per_100 }} |
+                    Белт: {{ product.protein_per_100 }} |
+                    Въгл: {{ product.carbs_per_100 }} |
+                    Мазн: {{ product.fat_per_100 }}
+                </td>
+
+                <td>
+                    {% if product.is_basic %}
+                        Да
+                    {% else %}
+                        Не
+                    {% endif %}
+                </td>
+
+                <td>
+
+                    <a href="{% url 'product-detail' product.pk %}"
+                       class="btn btn-sm btn-info">
+                       Детайли
+                    </a>
+
+                    <a href="{% url 'product-edit' product.pk %}"
+                       class="btn btn-sm btn-warning">
+                       Редакция
+                    </a>
+
+                    <a href="{% url 'product-delete' product.pk %}"
+                       class="btn btn-sm btn-danger">
+                       Изтрий
+                    </a>
+
+                </td>
+
             </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>{{ product }}</td>
-                    <td>{{ product.get_category_display }}</td>
-                    <td>{{ product.get_unit_display }}</td>
-                    <td>
-                        Калории: {{ product.calories_per_100 }} |
-                        Белт: {{ product.protein_per_100 }} |
-                        Въгл: {{ product.carbs_per_100 }} |
-                        Мазн: {{ product.fat_per_100 }}
-                    </td>
-                    <td>
-                        {% if product.is_basic %}Да{% else %}Не{% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'product-detail' product.pk %}" class="btn btn-sm btn-info">Детайли</a>
-                        <a href="{% url 'product-edit' product.pk %}" class="btn btn-sm btn-warning">Редакция</a>
-                        <a href="{% url 'product-delete' product.pk %}" class="btn btn-sm btn-danger">Изтрий</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+        {% endfor %}
+    </tbody>
+
+</table>
 
 {% else %}
-    <p>Все още няма добавени продукти.</p>
+
+<div class="alert alert-info">
+    Все още няма добавени продукти.
+</div>
+
 {% endif %}
 
 {% endblock %}

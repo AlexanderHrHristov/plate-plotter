@@ -9,12 +9,12 @@ class MealInline(admin.TabularInline):
 
 @admin.register(WeekMenu)
 class WeekMenuAdmin(admin.ModelAdmin):
-    list_display = ('start_date', 'notes')
-    search_fields = ('start_date',)
+    list_display = ("start_date", "notes")
+    search_fields = ("start_date",)
     inlines = [MealInline]
 
 
 @admin.register(Meal)
 class MealAdmin(admin.ModelAdmin):
-    list_display = ('week_menu', 'day', 'meal_type', 'dish', 'eating_out')
-    list_filter = ('day', 'meal_type', 'eating_out')
+    list_display = ("week_menu", "day", "dish", "product", "quantity")
+    list_filter = ("day",)

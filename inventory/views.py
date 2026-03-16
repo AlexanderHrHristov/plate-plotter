@@ -9,7 +9,21 @@ class ProductListView(ListView):
     model = Product
     template_name = "inventory/product-list.html"
     context_object_name = "products"
-    queryset = Product.objects.order_by("name", "brand")
+
+    def get_queryset(self):
+        queryset = Product.objects.order_by("name", "brand")
+        category = self.request.GET.get("category")
+
+        if category:
+            queryset = queryset.filter(category=category)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["selected_category"] = self.request.GET.get("category", "")
+        context["category_choices"] = Product.CATEGORY_CHOICES
+        return context
 
 
 class ProductDetailView(DetailView):

@@ -5,6 +5,11 @@
 {% block content %}
 <h1 class="mb-4">Добави хранене</h1>
 
+<div class="alert alert-info">
+Избери <strong>или ястие</strong>, или <strong>продукт</strong>.
+Не попълвай и двете едновременно.
+</div>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
@@ -12,4 +17,5 @@
     <button type="submit" class="btn btn-primary">Запази</button>
     <a href="{% url 'weekmenu-list' %}" class="btn btn-secondary">Отказ</a>
 </form>
+
 {% endblock %}

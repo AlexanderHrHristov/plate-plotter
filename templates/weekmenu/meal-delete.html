@@ -3,15 +3,16 @@
 {% block title %}Изтриване на хранене | PlatePlotter{% endblock %}
 
 {% block content %}
+
 <h1 class="mb-4">Изтриване на хранене</h1>
 
 <div class="alert alert-danger">
-    Сигурни ли сте, че искате да изтриете това хранене?
+Сигурни ли сте, че искате да изтриете това хранене?
 </div>
 
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Да, изтрий</button>
-    <a href="{% url 'weekmenu-list' %}" class="btn btn-secondary">Отказ</a>
 </form>
+
 {% endblock %}

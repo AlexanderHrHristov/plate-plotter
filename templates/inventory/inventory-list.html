@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load inventory_extras %}
 
 {% block title %}Наличности | PlatePlotter{% endblock %}
 
@@ -72,11 +73,9 @@
                     </td>
 
                     <td>
-                        {% if item.is_below_minimum %}
-                            <span class="badge bg-danger">Под минимум</span>
-                        {% else %}
-                            <span class="badge bg-success">ОК</span>
-                        {% endif %}
+                        <span class="badge {{ item.available_quantity|stock_badge:item.minimum_quantity }}">
+                            {{ item.available_quantity|stock_status:item.minimum_quantity }}
+                        </span>
                     </td>
 
                     <td>

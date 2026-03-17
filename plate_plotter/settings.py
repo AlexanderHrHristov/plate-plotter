@@ -81,11 +81,11 @@ DATABASES = {
         'NAME': 'plate_plotter_db',
         'USER': 'postgres',
 
-        #'PASSWORD': 'postgres', # Парола вкъщи
-        'PASSWORD': 'Logistic3#', # Парола на работа
+        'PASSWORD': 'postgres', # Парола вкъщи
+        #'PASSWORD': 'Logistic3#', # Парола на работа
 
         'HOST': 'localhost',
-        'PORT': '5432', # Проверка на кой порт работи PostgreSQL - 5432 или 5433
+        'PORT': '5433', # Проверка на кой порт работи PostgreSQL - 5432 или 5433
     }
 }
 

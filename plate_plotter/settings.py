@@ -76,16 +76,13 @@ WSGI_APPLICATION = 'plate_plotter.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'plate_plotter_db',
-        'USER': 'postgres',
-
-        'PASSWORD': 'postgres', # Парола вкъщи
-        #'PASSWORD': 'Logistic3#', # Парола на работа
-
-        'HOST': 'localhost',
-        'PORT': '5433', # Проверка на кой порт работи PostgreSQL - 5432 или 5433
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "mydatabase",
+        "USER": "mydatabaseuser",
+        "PASSWORD": "mypassword",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 

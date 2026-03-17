@@ -6,7 +6,7 @@ from django.db import transaction
 
 from inventory.models import Product, Inventory
 from meals.models import Dish
-from weekmenu.models import WeekMenu, Meal
+from weekmenu.models import WeekMenuModel, Meal
 
 """
 Напълва ми базата данни с продукти, ястия и меню.
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         if options["reset"]:
             self.stdout.write(self.style.WARNING("Изтривам старите данни..."))
             Meal.objects.all().delete()
-            WeekMenu.objects.all().delete()
+            WeekMenuModel.objects.all().delete()
             Dish.objects.all().delete()
             Inventory.objects.all().delete()
             Product.objects.all().delete()
@@ -373,9 +373,9 @@ class Command(BaseCommand):
         self.stdout.write("Създавам demo седмично меню...")
 
         monday = date.today() - timedelta(days=date.today().weekday())
-        week_menu, _ = WeekMenu.objects.update_or_create(
+        week_menu, _ = WeekMenuModel.objects.update_or_create(
             start_date=monday,
-            defaults={"notes": "Примерно седмично меню за презентация на проекта"},
+            defaults={"notes": "Примерно седмично меню"},
         )
 
         Meal.objects.filter(week_menu=week_menu).delete()

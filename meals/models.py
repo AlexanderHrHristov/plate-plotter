@@ -1,9 +1,16 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
+
 from inventory.models import Product
 
 
 class Dish(models.Model):
+    """
+    Модел за ястие с основните му хранителни стойности.
+    Данните се използват при изчисляване на калории и макроси
+    в дневното и седмичното меню.
+    """
+
     name = models.CharField(
         max_length=80,
         unique=True,
@@ -64,6 +71,11 @@ class Dish(models.Model):
 
 
 class DishIngredient(models.Model):
+    """
+    Междинен модел между ястие и продукт.
+    Пази кой продукт участва в ястието и в какво количество.
+    """
+
     dish = models.ForeignKey(
         Dish,
         on_delete=models.CASCADE,
@@ -83,14 +95,23 @@ class DishIngredient(models.Model):
         decimal_places=0,
         validators=[MinValueValidator(1)],
         verbose_name="Количество",
-        help_text="Количество от продукта за ястието.",
+        help_text="Количеството от продукта, което се използва в ястието.",
     )
 
     class Meta:
-        unique_together = ("dish", "product")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["dish", "product"],
+                name="unique_product_per_dish",
+            )
+        ]
         ordering = ("dish", "product__name")
         verbose_name = "Съставка на ястие"
-        
+        verbose_name_plural = "Съставки на ястия"
 
     def __str__(self):
-        return f"{self.dish.name} - {self.product.full_name} ({self.quantity} {self.product.get_unit_short()})"
+        return (
+            f"{self.dish.name} - "
+            f"{self.product.full_name} "
+            f"({self.quantity} {self.product.get_unit_short()})"
+        )

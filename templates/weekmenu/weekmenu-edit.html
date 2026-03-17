@@ -10,6 +10,6 @@
     {{ form.as_p }}
 
     <button type="submit" class="btn btn-warning">Запази</button>
-    <a href="{% url 'weekmenu-detail' weekmenu.pk %}" class="btn btn-secondary">Отказ</a>
+    <a href="{% url 'weekmenu-detail' object.pk %}" class="btn btn-secondary">Отказ</a>
 </form>
 {% endblock %}

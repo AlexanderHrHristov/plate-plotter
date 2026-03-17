@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import WeekMenu, Meal
+from .models import WeekMenuModel, Meal
 
 
 class MealInline(admin.TabularInline):
@@ -7,7 +7,7 @@ class MealInline(admin.TabularInline):
     extra = 1
 
 
-@admin.register(WeekMenu)
+@admin.register(WeekMenuModel)
 class WeekMenuAdmin(admin.ModelAdmin):
     list_display = ("start_date", "notes")
     search_fields = ("start_date",)

@@ -8,10 +8,15 @@ from inventory.models import Product
 from meals.models import Dish
 
 
-class WeekMenu(models.Model):
+class WeekMenuModel(models.Model):
+    """
+    Представя седмично меню, започващо от определена дата.
+    Към него са свързани отделните хранения за всеки ден.
+    """
+
     start_date = models.DateField(
         unique=True,
-        verbose_name="Начален ден от седмицата",
+        verbose_name="Начален ден на седмицата",
     )
 
     notes = models.TextField(
@@ -28,6 +33,7 @@ class WeekMenu(models.Model):
         return f"Седмица от {self.start_date}"
 
     def entries_for_day(self, day):
+        """Връща всички записи за конкретен ден."""
         return self.meals.filter(day=day)
 
     def total_calories_for_day(self, day):
@@ -64,6 +70,12 @@ class WeekMenu(models.Model):
 
 
 class Meal(models.Model):
+    """
+    Един запис в седмичното меню.
+    Представя конкретно хранене за даден ден,
+    което може да бъде или ястие, или отделен продукт.
+    """
+
     DAY_CHOICES = [
         (1, "Понеделник"),
         (2, "Вторник"),
@@ -75,7 +87,7 @@ class Meal(models.Model):
     ]
 
     week_menu = models.ForeignKey(
-        WeekMenu,
+        WeekMenuModel,
         on_delete=models.CASCADE,
         related_name="meals",
     )
@@ -107,7 +119,7 @@ class Meal(models.Model):
         default=100,
         validators=[MinValueValidator(1)],
         verbose_name="Количество",
-        help_text="За продукт: грамове или брой. За ястие може да оставиш 1.",
+        help_text="За продукт – грамове или брой. За ястие обикновено остава 1.",
     )
 
     notes = models.TextField(
@@ -125,18 +137,25 @@ class Meal(models.Model):
         return f"{self.week_menu} - {self.get_day_display()} - {item_name}"
 
     def clean(self):
+        """Гарантира, че е избрано или ястие, или продукт."""
         if not self.dish and not self.product:
             raise ValidationError("Избери ястие или продукт.")
 
         if self.dish and self.product:
-            raise ValidationError("Може да избереш само едно: ястие или продукт.")
+            raise ValidationError(
+                "Може да избереш само едно от двете: ястие или продукт."
+            )
 
     def total_calories(self):
         if self.dish:
             return Decimal(self.dish.calories)
 
         if self.product:
-            return round((self.quantity / Decimal("100")) * Decimal(self.product.calories_per_100), 2)
+            return round(
+                (self.quantity / Decimal("100"))
+                * Decimal(self.product.calories_per_100),
+                2,
+            )
 
         return Decimal("0")
 
@@ -145,7 +164,11 @@ class Meal(models.Model):
             return Decimal(self.dish.protein)
 
         if self.product:
-            return round((self.quantity / Decimal("100")) * Decimal(self.product.protein_per_100), 2)
+            return round(
+                (self.quantity / Decimal("100"))
+                * Decimal(self.product.protein_per_100),
+                2,
+            )
 
         return Decimal("0")
 
@@ -154,7 +177,11 @@ class Meal(models.Model):
             return Decimal(self.dish.carbs)
 
         if self.product:
-            return round((self.quantity / Decimal("100")) * Decimal(self.product.carbs_per_100), 2)
+            return round(
+                (self.quantity / Decimal("100"))
+                * Decimal(self.product.carbs_per_100),
+                2,
+            )
 
         return Decimal("0")
 
@@ -163,6 +190,10 @@ class Meal(models.Model):
             return Decimal(self.dish.fat)
 
         if self.product:
-            return round((self.quantity / Decimal("100")) * Decimal(self.product.fat_per_100), 2)
+            return round(
+                (self.quantity / Decimal("100"))
+                * Decimal(self.product.fat_per_100),
+                2,
+            )
 
         return Decimal("0")

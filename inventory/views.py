@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from decimal import Decimal
-from .forms import ProductForm, InventoryEditForm
+from .forms import ProductCreateForm, InventoryStockUpdateForm
 from .models import Product, Inventory
 from django.db import models
 
@@ -33,10 +33,9 @@ class ProductDetailView(DetailView):
     template_name = "inventory/product-detail.html"
     context_object_name = "product"
 
-
 class ProductCreateView(CreateView): 
     model = Product
-    form_class = ProductForm
+    form_class = ProductCreateForm
     template_name = "inventory/product-create.html"
     success_url = reverse_lazy("product-list")
 
@@ -52,9 +51,11 @@ class ProductCreateView(CreateView):
         return response
 
 
-class ProductUpdateView(UpdateView):
+
+
+class ProductUpdateView(UpdateView): # Ъпдейтване на продукта
     model = Product
-    form_class = ProductForm
+    form_class = ProductCreateForm
     template_name = "inventory/product-edit.html"
     success_url = reverse_lazy("product-list")
 
@@ -74,7 +75,7 @@ class InventoryListView(ListView):
 
 class InventoryUpdateView(UpdateView):
     model = Inventory
-    form_class = InventoryEditForm
+    form_class = InventoryStockUpdateForm
     template_name = "inventory/inventory-edit.html"
     success_url = reverse_lazy("inventory-list")
 
@@ -92,7 +93,7 @@ from django.db import models
 from django.views.generic import ListView
 
 from .models import Inventory
-from weekmenu.models import WeekMenu
+from weekmenu.models import WeekMenuModel
 
 
 
@@ -109,7 +110,7 @@ class ShoppingListView(ListView):
         shopping_items = []
         week_menu_id = self.request.GET.get("week_menu")
 
-        context["week_menus"] = WeekMenu.objects.all().order_by("-start_date")
+        context["week_menus"] = WeekMenuModel.objects.all().order_by("-start_date")
 
         if not week_menu_id:
             context["shopping_items"] = []
@@ -118,8 +119,8 @@ class ShoppingListView(ListView):
             return context
 
         try:
-            selected_week_menu = WeekMenu.objects.get(pk=week_menu_id)
-        except WeekMenu.DoesNotExist:
+            selected_week_menu = WeekMenuModel.objects.get(pk=week_menu_id)
+        except WeekMenuModel.DoesNotExist:
             context["shopping_items"] = []
             context["selected_week_menu"] = None
             context["total_items"] = 0

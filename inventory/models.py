@@ -227,7 +227,7 @@ class Inventory(models.Model):
     def shortage_amount(self):
         """
         Колко не достига до минималната наличност.
-        Ако всичко е наред, връща 0.
+        Ако всичко е наред, трябва да връща 0.
         """
         if self.is_below_minimum:
             return self.minimum_quantity - self.available_quantity

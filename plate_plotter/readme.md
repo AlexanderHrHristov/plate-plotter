@@ -27,16 +27,13 @@ weekmenu – седмично меню и хранения
 Product
 Inventory
 Dish
-
 DishIngredient (Many-to-Many между Dish и Product)
-
 WeekMenu
-
 Meal
 
-Инсталация
+*** УКАЗАНИЯ ЗА ИНСТАЛИРАНЕ НА ПРОДУКТА ***
 
-Клонирай проекта:
+1. Клониране на проекта от Public GitHub хранилище:
 
 git clone https://github.com/AlexanderHrHristov/plate-plotter.git
 cd plate-plotter
@@ -45,13 +42,11 @@ cd plate-plotter
 
 python -m venv .venv
 
-Активирай:
-
-Windows
-
+Активиране:
+за Windows
 .venv\Scripts\activate
 
-Инсталирай зависимостите:
+Инсталирана на зависимостите:
 
 pip install -r requirements.txt
 Настройка на базата

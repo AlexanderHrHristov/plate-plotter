@@ -1,12 +1,10 @@
-    # PlatePlotter
+PlatePlotter
 
-    PlatePlotter е Django уеб приложение за планиране на седмично меню, управление на хранителни продукти и следене на наличности у дома.
+PlatePlotter е Django уеб приложение за планиране на седмично меню, управление на хранителни продукти и следене на наличности у дома.
+Проектът е разработен като изпитен проект за Django Basics @ SoftUni.
 
-    Проектът е разработен като изпитен проект за **Django Basics @ SoftUni**.
-
-    ---
-
-    ## Основни функционалности
+  
+ ОСНОВНИ ФУНКЦИОНАЛНОСТИ  
 
     - управление на хранителни продукти
     - следене на наличности и минимални количества
@@ -15,9 +13,8 @@
     - добавяне на хранения по дни
     - автоматично изчисляване на калории и макронутриенти
 
-    ---
 
-    ## Технологии
+ИЗПОЛЗВАНИ ТЕХНОЛОГИИ
 
     - Python
     - Django
@@ -25,54 +22,43 @@
     - Bootstrap
     - Django Template Engine
 
-    ---
 
-    ## Структура на проекта
+СТРУКТУРА
 
     Проектът съдържа три Django приложения:
+    - inventory – управление на продукти и наличности  
+    - meals – управление на ястия  
+    - weekmenu – седмично меню и хранения  
 
-    - **inventory** – управление на продукти и наличности  
-    - **meals** – управление на ястия  
-    - **weekmenu** – седмично меню и хранения  
 
-    ---
-
-    ## Основни модели
-
+    Основните модели на проекта са:
     - Product
     - Inventory
     - Dish
-    - DishIngredient
-    - WeekMenu
     - Meal
+    - WeekMenu
 
-    ---
 
-    ## Инсталация
+ИНСТАЛАЦИЯ    
 
-    Клонирай проекта:
-
-    ```bash
+    Клонирайте проекта от GitHub хранилището:
     git clone https://github.com/AlexanderHrHristov/plate-plotter.git
+
+    Отворете директория:
     cd plate-plotter
 
-    Създай виртуална среда:
-
+    Създайте виртуална среда:
     python -m venv .venv
 
-    Активирай я:
-
-    Windows
-
+    Активиране:
     .venv\Scripts\activate
 
-    Инсталирай зависимостите:
-
+    Инсталиране на зависимостите:
     pip install -r requirements.txt
+
     Настройка на базата данни
 
     Проектът използва PostgreSQL.
-
     Примерна конфигурация в settings.py:
 
     DATABASES = {
@@ -80,28 +66,40 @@
             "ENGINE": "django.db.backends.postgresql",
             "NAME": "plateplotter",
             "USER": "postgres",
-            "PASSWORD": "yourpassword",
+            "PASSWORD": "yourpassword", 
             "HOST": "localhost",
-            "PORT": "5432",
+            "PORT": "5432",    
         }
     }
-    Миграции
+    
+    Изпълнете миграции:
     python manage.py makemigrations
     python manage.py migrate
-    Демо данни
+
+
+
+ ДЕМО ДАННИ
+
     Проектът съдържа custom management command за генериране на примерни данни:
     python manage.py seed_demo_data
 
     Командата създава:
-    примерни продукти
-    наличности
-    ястия
-    седмично меню
-    хранения
+    -    примерни продукти
+    -    наличности
+    -    ястия
+    -   седмично меню
+    -   списък за пазаруване
 
     Стартиране на приложението
     python manage.py runserver
 
     Отвори: http://127.0.0.1:8000/
-    Автор:  Alexander Hristov
-    Django  Basics Retake Exam Project – SoftUni
+
+
+Автор на  проекта: Alexander Hristov
+            https://github.com/AlexanderHrHristov
+            email: alexander.hristov@proton.me
+            https://www.linkedin.com/in/alexander-hristov-82b92821/
+            phone: +359889125661
+
+
